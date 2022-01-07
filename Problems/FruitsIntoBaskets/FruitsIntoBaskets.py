@@ -1,3 +1,16 @@
+'''
+Solution:
+
+Standard Sliding Window Problem. Use hashmap with fruits as the key and counts as the value. 
+Our condition to shrink the window is when len(d) > 2, since this is the number of keys (distinct fruits) in the window.
+When count hits 0 for a fruit, we delete the fruit from the map.
+
+Complexity:
+Time Complexity: O(n)
+Space Complexity: O(k) --> O(1) Since k=2
+'''
+
+
 class Solution:
     def totalFruit(self, fruits: List[int]) -> int:
         windowStart = 0
