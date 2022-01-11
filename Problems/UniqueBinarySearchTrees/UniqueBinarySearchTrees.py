@@ -1,3 +1,9 @@
+'''
+The time complexity of the memoized algorithm will be O(n^2), since we are iterating from ‘1’ to ‘n’ and ensuring that each sub-problem is evaluated only once. 
+The space complexity will be O(n) for the memoization map.
+'''
+
+
 class TreeNode:
   def __init__(self, val):
     self.val = val
