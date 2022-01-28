@@ -1,5 +1,10 @@
-from collections import deque
+'''
+Same as normal Topological Sort. 
 
+If there is a cycle, then the length of the sorted order will not equal the number of tasks/vertices.
+'''
+
+from collections import deque
 
 def is_scheduling_possible(tasks, prerequisites):
       sortedOrder = []
