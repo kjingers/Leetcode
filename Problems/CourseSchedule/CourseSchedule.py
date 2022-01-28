@@ -33,7 +33,12 @@ def is_scheduling_possible(tasks, prerequisites):
                         sources.append(vertex)
       
       
-      return tasks == len(sortedOrder)
+      #return tasks == len(sortedOrder)
+      if tasks == len(sortedOrder):
+            return sortedOrder
+      return []
+     
+
   
 
 
