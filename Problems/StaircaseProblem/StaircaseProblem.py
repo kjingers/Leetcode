@@ -64,5 +64,37 @@ def staircase(n, m):
 
 print(staircase(100, 6))
 
+'''
+Leetcode (m=2)
+'''
+'''
+Similar to fibinocci. From each step, we calculate the ways after taking 1 step and 2 steps.
+Time Complexity: With memoization, O(2n) = O(n)
+
+'''
+
+class Solution:
+    def nStairsRemaining(self, n, memo):
+        
+        # Base Case: If n < 0, then not a valid way
+        # If n == 0, then a valid way
+        if n < 0:
+            return 0
+        elif n == 0:
+            return 1
+        elif n in memo:
+            return memo[n]
+        
+        # Calculate ways recursively with 1 fewer step and 2 fewer steps
+        # Add to memo
+        memo[n] = self.nStairsRemaining(n-1, memo) + self.nStairsRemaining(n-2, memo)
+        return memo[n]
+    
+        
+        
+    def climbStairs(self, n: int) -> int:
+        memo = {}
+        return self.nStairsRemaining(n, memo)
+
 
 
