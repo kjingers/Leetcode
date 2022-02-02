@@ -1,3 +1,12 @@
+'''
+Start off binary search like normal. Calculate mid. Then, 
+- Determine which side is sorted
+- Check if target is in that sorted side
+- If is in sorted side, shrink window to that side
+- Else, shrink window to other side
+'''
+
+
 def search_rotated_array(arr, key):
   start, end = 0, len(arr) - 1
   
