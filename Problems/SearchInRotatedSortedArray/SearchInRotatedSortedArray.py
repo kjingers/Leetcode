@@ -1,3 +1,4 @@
+   
 '''
 Start off binary search like normal. Calculate mid. Then, 
 - Determine which side is sorted
@@ -6,45 +7,29 @@ Start off binary search like normal. Calculate mid. Then,
 - Else, shrink window to other side
 '''
 
-
-def search_rotated_array(arr, key):
-  start, end = 0, len(arr) - 1
-  
-  # Start off like Normal, calculate Mid
-  while start <= end:
-    mid = start + (end - start) // 2
-
-    if key == arr[mid]:
-      return mid
-
-    # If arr[mid] >= arr[start], then we know start-->mid is 
-    # sorted in Ascending order.
-    if arr[mid] >= arr[start]:
-      
-      # Now we check if key is in this range.
-      if key >= arr[start] and key < arr[mid]:
-
-        # If in this range, adjust end
-        end = mid - 1
-
-      # Else, adjust start, since we know key is in second half
-      else:
-        start = mid + 1
-
-    else: # Else, mid-->end in ascending order
-      
-      if key > arr[mid] and key <= arr[end]:
-        start = mid + 1
-      
-      else:
-        end = mid - 1
-
-  return -1
-
-
-def main():
-  print(search_rotated_array([10, 15, 1, 3, 8], 15))
-  print(search_rotated_array([4, 5, 7, 9, 10, -1, 2], 10))
-
-
-main()
+class Solution:
+    def search(self, nums: List[int], target: int) -> int:
+        start, end = 0, len(nums) - 1
+        
+        # Use <= since need to check when start == mid == end
+        while start <= end:
+            mid = start + (end - start) // 2
+            
+            # Check if mid is target
+            if nums[mid] == target:
+                return mid
+            
+            # Right side is sorted
+            if nums[mid] < nums[end]:
+                if target > nums[mid] and target <= nums[end]:
+                    start = mid + 1
+                else:
+                    end = mid - 1
+            else: # Left side is sorted
+                if target >= nums[start] and target < nums[mid]:
+                    end = mid - 1
+                else:
+                    start = mid + 1
+            
+        return -1
+        
