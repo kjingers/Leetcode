@@ -8,6 +8,8 @@ DP solution is O(n^2) and times out in Leetcode
 
 A better less straightforward solution is to use binary search to populate an array
 
+https://leetcode.com/problems/longest-increasing-subsequence/discuss/1326552/Optimization-From-Brute-Force-to-Dynamic-Programming-Explained!
+
 '''
 
 class Solution:
