@@ -24,7 +24,8 @@ class Solution:
         
         for i in range(len(nums)):
             
-            index = bisect_left(dp, nums[i])
+            #index = bisect_left(dp, nums[i])
+            index = self.mybisect_left(dp, nums[i])
             
             if index == len(dp):
                 dp.append(nums[i])
@@ -32,6 +33,27 @@ class Solution:
                 dp[index] = nums[i]
                 
         return len(dp)
+    
+    def mybisect_left(self, nums, target):
+        
+        if len(nums) < 1:
+            return 0
+        
+        start, end = 0, len(nums) - 1
+        index = -1
+        
+        while start <= end:
+            mid = start + (end - start) // 2
+            
+            if nums[mid] == target:
+                index = mid
+                end = mid - 1
+            elif nums[mid] > target:
+                end = mid - 1
+            else:
+                start = mid + 1
+        
+        return index if index != -1 else start
 
     
     
