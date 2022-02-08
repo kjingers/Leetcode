@@ -9,6 +9,8 @@ Recurrence Relation:
 
 rob(i) = max( rob(i + 2) + currentHouseValue, rob(i + 1) )
 
+Time Complexity: O(n) where n is len(nums) 
+
 '''
 
 
