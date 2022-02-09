@@ -11,6 +11,11 @@ tiles with a greater value and update either pacific or atlantic visited along t
 - matrix[m-1][i] Touches Atlantic
 
 '''
+from collections import deque
+
+
+
+# DFS Recursive
 
 class Solution:
     def pacificAtlantic(self, heights: List[List[int]]) -> List[List[int]]:
@@ -57,6 +62,74 @@ class Solution:
                 
             self.dfs(matrix, x, y, visited, m, n)
             
+# BFS
+
+'''
+class Solution:
+    def pacificAtlantic(self, heights: List[List[int]]) -> List[List[int]]:
+        
+        m = len(heights)
+        n = len(heights[0])
+        
+        a_visited = [[False for _ in range(n)] for _ in range(m)]
+        p_visited = [[False for _ in range(n)] for _ in range(m)]
+        
+        self.directions = [(1, 0), (0, 1), (-1, 0), (0, -1)]
+        
+        a_queue = deque()
+        p_queue = deque()
         
         
+        # Iterate over rows for first col (Pacific) and last (Atlantic)
+        for i in range(m):
+            #self.dfs(heights, i, 0, p_visited, m, n)
+            #self.dfs(heights, i, n - 1, a_visited, m, n)
+            p_queue.append((i, 0))
+            a_queue.append((i, n - 1))
+            
+            
+        # Iterate over cols for first row (Pacific) and last (Atlantic)
+        for i in range(n):
+            #self.dfs(heights, 0, i, p_visited, m, n)
+            #self.dfs(heights, m - 1, i, a_visited, m, n)
+            
+            p_queue.append((0, i))
+            a_queue.append((m-1, i))
+            
+            
+            
+        self.bfs(heights, p_queue, p_visited, m, n)
+        self.bfs(heights, a_queue, a_visited, m, n)
         
+        print(p_visited)
+        result = []
+        
+        for i in range(m):
+            for j in range(n):
+                if a_visited[i][j] and p_visited[i][j]:
+                    result.append([i, j])
+                    
+        return result
+        
+    def bfs(self, matrix, queue, visited, m, n):
+        
+        while queue:
+            
+            i, j = queue.popleft()
+            
+            if visited[i][j]:
+                continue
+            
+            visited[i][j] = True
+
+            for dir in self.directions:
+                x = dir[0] + i
+                y = dir[1] + j
+
+                # If out of bounds or current cell is less than previous cell
+                if x < 0 or x >= m or y < 0 or y >= n or matrix[x][y] < matrix[i][j]:
+                    continue
+
+                queue.append((x, y))
+                
+'''
