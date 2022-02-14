@@ -9,10 +9,12 @@ For this reason, we don't need a seperate visited matrix.
 -   Need to mark cell to '#' so taht we don't revisit it in current iteration. Once we return, from
     successive dfses, then we need to change cell back to original, so that it can be used for future
     checks.
+    
+Iterative Solution if difficult, because we have to know when to backtrack the mark cells
 
 '''
 
-
+# Recursive
 class Solution:
     def exist(self, board: List[List[str]], word: str) -> bool:
         
@@ -37,3 +39,4 @@ class Solution:
         board[i][j] = word[index]
 
         return found
+
