@@ -11,6 +11,38 @@ will return True if both trees have the same structure.
 
 In our main function, we can dfs/bfs our main tree until node.val == root2.val. Then we can call
 sameTree(node, root2)
+
+'''
+
+# Recursive
+class Solution:
+    def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:
+        return self.dfs(root, subRoot)
+        
+    def dfs(self, node, subRoot):
+        
+        if not node:
+            return False
+        
+        if node.val == subRoot.val and self.sameTree(node, subRoot):
+            return True
+        
+        return self.dfs(node.left, subRoot) or self.dfs(node.right, subRoot)
+
+    def sameTree(self, root1, root2):
+        if not root1 and not root2:
+            return True
+        
+        
+        if not root1 or not root2 or root1.val != root2.val:
+            return False
+        
+        return self.sameTree(root1.left, root2.left) and self.sameTree(root1.right, root2.right)
+    
+        
+            
+
+# Iterative
 '''
 from collections import deque
 class Solution:
@@ -64,7 +96,7 @@ class Solution:
 
         return False if q1 or q2 else True
             
-        
+'''
         
         
         
