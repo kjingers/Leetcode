@@ -3,6 +3,9 @@ Monotonic Decreasing Queue ensures max element at head.
 
 After pushing to queue, if head index is out of window, then pop it out. 
 Then update output array if we have gone atleast k loops.
+
+I think a heap could work too, but that would make the Time Complexity: O(nlog(k))
+Monotonic queue works better, because once we pop a smaller value, we don't need to keep track of it anymore.
 '''
 
 
