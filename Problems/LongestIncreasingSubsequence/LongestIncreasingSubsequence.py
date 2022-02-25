@@ -1,109 +1,96 @@
 '''
-We can traverse the list. For each num, we have two options:
-1. If num[i] > num[i-1], then we add num to curent subsequence and recursively solve the rest
-2. We recursively solve the rest without adding current num
+DP Top Down:
 
-Since previousIndex can be -1, we will always store [previousIndex + 1] into array
+We only need to store dp[prev_index]. If you use dp[prev][current], for a given dp[prev][i], the max value will
+always be at dp[prev][prev]. The subsequence either stays the same or increases.
 
-Alternative faster approach is to populate an array to keep track of the smallest values at 
-each subsequence length. For each num, we binary search our array, and replace the next larger number.
-If num is larger than all numbers in our array, we append to the end of the array. The length of the array
-at the end is the longest subsequence.
+So, dp[i] is the max increasing subsequence that starts at i
 
-Time Complexity: O(nlog(n))
+
+Bottom Up
+
+if num[i] > num[j] => dp[i] = dp[j] + 1 if there is no bigger LIS for 'i'
+
+For each index, calculate the LIS for all indexes before
+
+Binary Search - Fastest Method
+
+Not sure how I would ever come up with this. keep a dp array. For each num, seach dp array for number that is next largest, and replace it. If num would be the largest number, then append to end. The length of dp array at end is the longest increasing subsequence.
 
 '''
+
+# Binary Search
 
 import bisect
 
 class Solution:
-    
-    def lengthOfLIS(self, nums):
-        
+    def lengthOfLIS(self, nums: List[int]) -> int:
         dp = []
         
-        for i in range(len(nums)):
+        for num in nums:
+            idx = bisect_left(dp, num)
             
-            #index = bisect_left(dp, nums[i])
-            index = self.mybisect_left(dp, nums[i])
-            
-            if index == len(dp):
-                dp.append(nums[i])
+            if idx == len(dp):
+                dp.append(num)
             else:
-                dp[index] = nums[i]
+                dp[idx] = num
                 
         return len(dp)
-    
-    def mybisect_left(self, nums, target):
         
-        if len(nums) < 1:
-            return 0
-        
-        start, end = 0, len(nums) - 1
-        index = -1
-        
-        while start <= end:
-            mid = start + (end - start) // 2
-            
-            if nums[mid] == target:
-                index = mid
-                end = mid - 1
-            elif nums[mid] > target:
-                end = mid - 1
-            else:
-                start = mid + 1
-        
-        return index if index != -1 else start
 
-    
-    
+# Bottom Up
 '''
-# Brute Force -> DP Solution.
-# TLE with Time Complexity: O(n^2)
-
 class Solution:
     def lengthOfLIS(self, nums: List[int]) -> int:
         
-        #dp = [[-1 for _ in range(len(nums) + 1)] for _ in range(len(nums))]
+        n = len(nums)
+        # Initialize to 1, since all substrings are length 1 by themselves
+        dp = [1 for _ in range(n)]
+        maxLen = 1
+        
+        
+        for i in range(1, n):
+            for j in range(i):
+                    
+                if nums[i] > nums[j]:
+                    dp[i] = max(dp[i], 1 + dp[j])
+                    maxLen = max(maxLen, dp[i])
+                    
+                    
+        return maxLen
+'''
+
+
+'''
+# Top Down (TLE)
+class Solution:
+    def lengthOfLIS(self, nums: List[int]) -> int:
+        
         dp = [-1 for _ in range(len(nums) + 1)]
-        #dp = {}
+        #return self.solve(nums, -1, 0, dp)
         
-        return self.lengthOfLIS_rec(dp, nums, -1, 0)
+        self.solve(nums, -1, 0, dp)
+        print(dp)
+        return dp[0]
         
-    def lengthOfLIS_rec(self, dp, nums, previousIndex, currentIndex):
+    def solve(self, nums, prevIndex, currIndex, dp):
         
-        # Base Case
-        if currentIndex == len(nums):
+        if currIndex >= len(nums):
             return 0
         
-        #if dp[currentIndex][previousIndex + 1] != -1:
-        #    return dp[currentIndex][previousIndex + 1]
+        if dp[prevIndex + 1] != -1:
+            return dp[prevIndex + 1]
         
-        if dp[previousIndex + 1] != -1:
-            return dp[previousIndex + 1]
-        
-        #if (currentIndex, previousIndex) in dp:
-        #    return dp[(currentIndex, previousIndex)]
-        
-        
+        # Try taking
         c1 = 0
-        
-        # 1. Including current number
-        if previousIndex == -1 or nums[currentIndex] > nums[previousIndex]:
-            c1 = 1 + self.lengthOfLIS_rec(dp, nums, currentIndex, currentIndex + 1)
+        if prevIndex == -1 or nums[currIndex] > nums[prevIndex]:
+            c1 = 1 + self.solve(nums, currIndex, currIndex + 1, dp)
             
-        # 2. Skipping current index. 
-        c2 = self.lengthOfLIS_rec(dp, nums, previousIndex, currentIndex + 1)
+        # Try skipping
+        c2 = self.solve(nums, prevIndex, currIndex + 1, dp)
         
-        #dp[currentIndex][previousIndex + 1] = max(c1, c2)
-        #return dp[currentIndex][previousIndex + 1]
-        
-        dp[previousIndex + 1] = max(c1, c2)
-        return dp[previousIndex + 1]
-        
-        #dp[(currentIndex, previousIndex)] = max(c1, c2)
-        #return dp[(currentIndex, previousIndex)]
-        
+        dp[prevIndex + 1] = max(c1, c2)
+        return dp[prevIndex + 1]
 '''
-        
-        
+                    
+    
