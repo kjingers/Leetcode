@@ -1,74 +1,81 @@
 '''
-Brute Force strategy is to recursively compare both string index by index.
+Dynamic Programming with "Longest Common Substring" Pattern.
 
-For an index i and index j:
-- If they text1[i] == text[j], then add 1 and recursively call with i+1 and j+1. Return result
-- Else, make two recursive calls for (i+1, j) and (i, j+1) and return the max
+Unlikee "Longest Common Substring", we don't need to keep track of the max substring, since the count doesn't
+reset if two characters don't match.
 
-The longest substring or a given i and j is always the same. This calculation will be done many
-times using the brute force method. So, we can memoize the resuults for a given i and j.
+Again, 3 options:
+    1. If characters match iterate both and add 1. Return this
+    2. Iterate i
+    3. Iterate j
+    
+max chars don't match, return max(c1, c2)
+    
 
-Memoized Time Complexity: O(mn)
+
+Bottom Up:
+
+Recurrence relation
+
+if s1[i - 1] == s2[j - 1]:
+    dp[i][j] = 1 + dp[i - 1][j - 1]
+else:
+    dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])
+
+
+
 
 '''
 
+# Bottom Up
 
 class Solution:
     def longestCommonSubsequence(self, text1: str, text2: str) -> int:
         
-        # dp[index1][index2]
-        dp = [[-1 for _ in range(len(text2))] for _ in range(len(text1))]
+        dp = [[0 for _ in range(len(text2) + 1)] for _ in range(len(text1) + 1)]
+        maxLen = 0
         
-        return self.LCS_rec(dp, text1, text2, 0, 0)
+        for i in range(1, len(text1) + 1):
+            for j in range(1, len(text2) + 1):
+                if text1[i - 1] == text2[j - 1]:
+                    dp[i][j] = 1 + dp[i - 1][j - 1]
+                else:
+                    dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])
+                    
+                maxLen = max(maxLen, dp[i][j])
+                
+        #print(dp)      
+        #return maxLen
+        return dp[len(text1)][len(text2)]
         
         
-    def LCS_rec(self, dp, text1, text2, i, j):
-        
-        # Base case: One of the indicies is past the length of the string
-        if i == len(text1) or j == len(text2):
-            return 0
-        
-        if dp[i][j] != -1:
-            return dp[i][j]
-        
-        # If the are the same, then increment both pointers and return
-        # 1 + (longest subsequence of remaining substrings)
-        if text1[i] == text2[j]:
-            dp[i][j] = 1 + self.LCS_rec(dp, text1, text2, i + 1, j + 1)
-            return dp[i][j]
-        
-        c1 = self.LCS_rec(dp, text1, text2, i + 1, j)
-        c2 = self.LCS_rec(dp, text1, text2, i, j + 1)
-        
-        dp[i][j] = max(c1, c2)
-        return dp[i][j]
-    
-    
+# Top-Down
+
 '''
-# Brute Force Method
+from functools import lru_cache
 
 class Solution:
     def longestCommonSubsequence(self, text1: str, text2: str) -> int:
         
-        return self.LCS_rec(text1, text2, 0, 0)
+        return self.solve(text1, text2, 0, 0)
         
+    @lru_cache(None)
+    def solve(self, s1, s2, i, j):
         
-    def LCS_rec(self, text1, text2, i, j):
-        
-        # Base case: One of the indicies is past the length of the string
-        if i == len(text1) or j == len(text2):
+        if i >= len(s1) or j >= len(s2):
             return 0
         
-        # If the are the same, then increment both pointers and return
-        # 1 + (longest subsequence of remaining substrings)
-        if text1[i] == text2[j]:
-            return 1 + self.LCS_rec(text1, text2, i + 1, j + 1)
-        
-        c1 = self.LCS_rec(text1, text2, i + 1, j)
-        c2 = self.LCS_rec(text1, text2, i, j + 1)
+        c1 = 0
+        if s1[i] == s2[j]:
+            return 1 + self.solve(s1, s2, i + 1, j + 1)
+            
+        c1 = self.solve(s1, s2, i + 1, j)
+        c2 = self.solve(s1, s2, i, j + 1)
         
         return max(c1, c2)
 '''
+            
+        
         
         
         
