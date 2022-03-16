@@ -9,6 +9,8 @@ At each char, we
     - update new lastPos for char
     - increment res
 
+At each loop, the calculated currTotal is the sum number of unique chars in all substrings ending at i.
+
 '''
 
 # Tracking contribution of each character for each substring ending at i
