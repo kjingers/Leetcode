@@ -1,49 +1,84 @@
+'''
+Can use minHeap and Euclidean distance.
+
+Quick select is technically the fastest algo
+'''
+
 from heapq import *
 
+# Using maxHeap
+'''
 class Point:
+    def __init__(self, coord):
+        self.x = coord[0]
+        self.y = coord[1]
+        self.dist = (self.x * self.x) + (self.y * self.y)
+    
+    # Use > since we want largest on top
+    def __lt__(self, other):
+        return self.dist > other.dist
+    
+    
+class Solution:
+    def kClosest(self, points: List[List[int]], k: int) -> List[List[int]]:
+        maxHeap = []
+        
+        for p in points:
+            heappush(maxHeap, Point(p))
+            
+            if len(maxHeap) > k:
+                heappop(maxHeap)
+                
+        res = []
+        while maxHeap:
+            p = heappop(maxHeap)
+            res.append([p.x, p.y])
+        
+        return res
+'''    
+'''
+# Using maxHeap without class definiton
+class Solution:
+    def kClosest(self, points: List[List[int]], k: int) -> List[List[int]]:
+        
+        euclidean = lambda x, y : x * x + y * y
+        maxHeap = []
+        
+        for i, (x, y) in enumerate(points):
+            d = euclidean(x, y)
+            heappush(maxHeap, (-d, i))
+            if len(maxHeap) > k:
+                heappop(maxHeap)
+                
+        
+        return [points[i] for (_, i) in maxHeap]
+'''           
 
-  def __init__(self, x, y):
-    self.x = x
-    self.y = y
 
-  def print_point(self):
-    print("[" + str(self.x) + ", " + str(self.y) + "] ", end='')
-
-  def distance_to_origin(self):
-    return (self.x * self.x) + (self.y * self.y)
-  
-  # Comparator Function for Max Heap
-  # Use >, since Max Heap. We want largest distance at root
-  def __lt__(self, other):
-    return self.distance_to_origin() > other.distance_to_origin()
-
-
-def find_closest_points(points, k):
-  maxHeap = []
-
-  # Add K points to maxHeap
-  for i in range(k):
-    heappush(maxHeap, points[i])
-
-
-  # Loop through rest of the points
-  # If distance is smaller than root, then pop root and insert new point
-  for i in range(k, len(points)):
-    if points[i].distance_to_origin() < maxHeap[0].distance_to_origin():
-      heappop(maxHeap)
-      heappush(maxHeap, points[i])
-
-  return list(maxHeap)
-
-
-def main():
-
-  result = find_closest_points([Point(1, 3), Point(3, 4), Point(2, -1)], 2)
-  print("Here are the k points closest the origin: ", end='')
-  for point in result:
-    point.print_point()
-
-
-main()
-
-
+# Using Quickselect
+class Solution:
+    def kClosest(self, points: List[List[int]], k: int) -> List[List[int]]:
+        
+        euclidean = lambda x, y : x * x + y * y
+        distances = [euclidean(p[0], p[1]) for p in points]
+        dist = self.quickSelect(distances, k)
+        
+        return [p for p in points if euclidean(p[0], p[1]) <= dist]
+        
+    def quickSelect(self, distances, k):
+        pivot = random.choice(distances)
+        
+        left = [x for x in distances if x < pivot]
+        right = [x for x in distances if x > pivot]
+        mid = [x for x in distances if x == pivot]
+        
+        
+        L, M = len(left), len(mid)
+        
+        if k <= L:
+            return self.quickSelect(left, k)
+        elif k > L + M:
+            return self.quickSelect(right, k - L - M)
+        else:
+            return mid[0]
+        
