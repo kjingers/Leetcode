@@ -18,7 +18,11 @@ class Solution:
             three_combo = Counter(three_combo)
             patterns.update(three_combo)
         
-        return max(sorted(patterns), key=patterns.get)
+        
+        # First sort decending by count. Then ascending by combination lexicographically
+        sorted_dict = sorted(patterns, key = lambda x : (-patterns[x], x))
+        
+        return sorted_dict[0]
         
         
         
