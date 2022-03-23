@@ -32,8 +32,7 @@ class Solution:
                 if products[i].startswith(currWord):
                     temp.append(products[i])
             
-            if len(temp) > 0:
-                result.append(temp)
+            result.append(temp)
         
         return result
             
