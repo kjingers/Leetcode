@@ -1,46 +1,43 @@
 '''
-Sliding Window Problem.
-
-1. Put the counts of each letter in t into a dict.
-2. Increase size of window until window contains all letters of t
-3. Shrink window while window has all letters of t
-4. Update minLen, minStart, minEnd
+Sliding window using Counter. Tricky thing is we need to keep track of all matched characters of pattern.
 '''
 
 from collections import Counter
 
-
 class Solution:
     def minWindow(self, s: str, t: str) -> str:
         
-        if len(t) > len(s):
-            return ""
+        minLength = len(s) + 1
+        subStart = 0
         
-        d = Counter(t)
+        matched = 0
+        
+        counts = Counter(t)
         start = 0
         
-        outStr = ""
-        
         for end in range(len(s)):
-            endChar = s[end]
             
-            if endChar in d:
-                d[endChar] -= 1
+            rightChar = s[end]
             
-            while all(val <= 0 for val in d.values()):
-
-                if len(outStr) == 0 or (end - start + 1) < len(outStr):
-                    outStr = s[start:end + 1]
+            if rightChar in counts:
+                counts[rightChar] -= 1
+                if counts[rightChar] >= 0: # Only increment matched if productive
+                    matched += 1
+                    
+            while matched == len(t):
+                if (end - start + 1) < minLength:
+                    minLength = end - start + 1
+                    subStart = start
                 
-                startChar = s[start]
-                if startChar in d:
-                    d[startChar] += 1
-                
+                leftChar = s[start]
+                if leftChar in counts:
+                    if counts[leftChar] >= 0:
+                        matched -= 1
+                    counts[leftChar] += 1
                 start += 1
-            
-        return outStr
                 
-        
+        return "" if minLength > len(s) else s[subStart:subStart + minLength]
             
+        
         
         
