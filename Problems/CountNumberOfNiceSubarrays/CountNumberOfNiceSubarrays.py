@@ -27,12 +27,13 @@ class Solution:
             # Shrink Window
             # Everytime we shrink, we should add one to count since it is a valid subarray
             while oddCount == k:
-                print("left: %d, right: %d, count: %d" % (left, right, counter))
+                #print("left: %d, right: %d, count: %d" % (left, right, counter))
                 leftNum = nums[left]
                 oddCount -= leftNum & 1
                 counter += 1
                 left += 1
-                
+            
+            # If our right is still hitting evens, then we add that. Counter only goes to zero when we hit another odd.
             numSubarrays += counter
             
         return numSubarrays
