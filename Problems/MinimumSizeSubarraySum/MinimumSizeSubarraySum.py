@@ -1,7 +1,11 @@
 /*
-Positive Integers, so sliding window should work. Else, we would probably have to use prefix sum.
+Positive Integers, so sliding window should work. 
+
+Else, we would probably have to use prefix sum. Our dictionary would keep the index of the most recent occurance of each
+prefix sum value.
 */
 #include <climits>
+
 class Solution {
 public:
     int minSubArrayLen(int target, vector<int>& nums) {
