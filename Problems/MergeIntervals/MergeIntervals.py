@@ -1,31 +1,23 @@
 '''
-Must sort first by start time. 
-
-We can iterate through itervals. 
-- If current and previous overlap, then merge together and set merged to previous.
-- If not overlap, append previous and set current to previous
-
-Time Complexity: O(n*log(n)), since we must sort
+Sort by start time.
+    - Append first interval to result.
+    - For the following intervals, if interval's start is <= previous end, then update previous end (which is in result list)
 '''
-
 
 class Solution:
     def merge(self, intervals: List[List[int]]) -> List[List[int]]:
-        intervals.sort(key=lambda x: x[0])
-        prev = intervals[0]
-        merged = []
         
+        intervals.sort(key=lambda x:x[0])
+        result = []
         
-        for i in range(1, len(intervals)):
-            
-            # If Overlapping
-            if prev[1] >= intervals[i][0]:
-                #prev[0] = min(prev[0], intervals[i][0])
-                prev[1] = max(prev[1], intervals[i][1])
+        result.append(intervals[0])
+        
+        for interval in intervals:
+            if interval[0] <= result[-1][1]:
+                result[-1][1] = max(result[-1][1], interval[1])
             else:
-                merged.append(prev)
-                prev = intervals[i]
+                result.append(interval)
+        return result
         
-        merged.append(prev)
-        return merged
+        
         
