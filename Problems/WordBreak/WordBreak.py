@@ -1,32 +1,51 @@
 '''
+Brute-force: From start, iterate end index and check if substring matches a word in wordList. If so, recursively solve with updated start. Base case: if start is equal to len(s), return true
 
-We can iterate through the string. At each index, check all words in wordDict to see if any end at current index.
-If a word ends at current index, we mark dp[i] = True, if dp[i - len(word)] == True. This means that
-a word ends at the current index, and also a previous word ended at the index before this word.
+We can memoize. Since a given dp[end] = True if dp[start - 1] = True
 
-Essentially, we start from 0 and build out dp[0] to dp[len(s) + 1].
-dp[i] is True when words from wordDict can be used to build s from index 0 to i. So, once we get to the end,
-if dp[i + 1] == True, that means words from wordDict can build all of s.
-
-Time Complexity: O(nk) where n is length of s and k is number of words in wordDict
-
-
-
+Bottom up / BFS is more intuitive.
 '''
+
+# Bottom-up. start with dp[0] = True
+# Starting from True Index, check if subtring is in wordDict. If so, mark word end index True.
 
 class Solution:
     def wordBreak(self, s: str, wordDict: List[str]) -> bool:
         
         dp = [False for _ in range(len(s) + 1)]
+        dp[0] = True
+        wordSet = set(wordDict)
         
+        for i in range(len(s)):
+            if dp[i]: # Only check if words match up to previous index
+                for j in range(i + 1, len(s) + 1):
+                    if s[i:j] in wordSet:
+                        dp[j] = True
+        
+        return dp[-1]
+
+
+# Brute Force
+'''
+class Solution:
+    def wordBreak(self, s: str, wordDict: List[str]) -> bool:
+        
+        dp = [False for _ in range(len(s) + 1)]
         dp[0] = True
         
-        for i in range(len(s) + 1):
-            for w in wordDict:
-                if s[i - len(w):i] == w and dp[i - len(w)]:
-                    dp[i] = True
-                    
-        return dp[-1]
-                    
+        return self.solve(s, set(wordDict), 0)
+          
+    def solve(self, s, wordDict, start):
+        
+        # Base case
+        if start == len(s):
+            return True
+        
+        for end in range(start + 1, len(s) + 1):
+            if s[start:end] in wordDict:
+                return self.solve(s, wordDict, end)
             
+        return False
+        
+'''
         
