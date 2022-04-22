@@ -6,9 +6,45 @@ Loop through each word and see if it can be made up of other words. Backtracking
 Time = O(n * k) Where n is num of words and k is lenth of word
 
 Not sure if can memoize, because we remove different words from set each time
+
+Option 2: Use Bottom Up solution from WOrd Break I and buid on that with backtracking.
 '''
 
+class Solution:
+    def findAllConcatenatedWordsInADict(self, words: List[str]) -> List[str]:
+        wordDict = set(words)
+        res = []
+        
+        for word in words:
+            if len(word) == 0:
+                continue
+                
+            wordDict.remove(word)
+            
+            if self.wordBreak(word, wordDict):
+                res.append(word)
+            
+            wordDict.add(word)
+            
+        return res
+        
+        
+    def wordBreak(self, s: str, wordDict: List[str]) -> bool:
+        
+        dp = [False for _ in range(len(s) + 1)]
+        dp[0] = True
+        #wordSet = set(wordDict)
+        
+        for i in range(len(s)):
+            if dp[i]: # Only check if words match up to previous index
+                for j in range(i + 1, len(s) + 1):
+                    if s[i:j] in wordDict:
+                        dp[j] = True
+        
+        return dp[-1]
 
+
+'''
 class Solution:
     def findAllConcatenatedWordsInADict(self, words: List[str]) -> List[str]:
         
@@ -41,6 +77,8 @@ class Solution:
                 return True
         
         return False
+'''
+
            
             
         
