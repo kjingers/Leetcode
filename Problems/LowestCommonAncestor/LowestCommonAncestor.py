@@ -22,6 +22,26 @@ Essentially, we need a way to keep track of the path/parents for each node p and
 
 from collections import deque
 
+# Recursive Solution
+class Solution:
+    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+	    return self.dfs(root, p, q)
+	
+    def dfs(self, node: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+
+        # Base Cases
+        if not node:
+            return None
+
+        if node == p or node == q:
+            return node
+
+        left_node = self.dfs(node.left, p, q)
+        right_node = self.dfs(node.right, p, q)
+
+        return node if left_node and right_node else left_node or right_node
+
+ # Iterative with hash-map for for node->parent
 class Solution:
     def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
         
